@@ -17,22 +17,18 @@ using System.Net;
 public class Server : MonoBehaviour
 {
     public GameObject EventSystem;
-
-    
     private string strMessage0;
     //private List<Client> clientList = new List<Client>();
     private Socket socket;
     //private int newPlayer = 0;
     private int mark = -1;
-    private string newPlayerName;
     private byte[] buffer = new byte[1024];
     private string strMessage1;
-    private string PlayerName;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        EventSystem = GameObject.Find("EventSystem");
     }
 
     public void changeInfo(string strMessage0)
@@ -73,6 +69,7 @@ public class Server : MonoBehaviour
         {
             return;
         }
+
         string str = Encoding.UTF8.GetString(buffer, 0, len);
         mark = int.Parse("" + str[0]);
         if (mark == 1)
@@ -97,7 +94,7 @@ public class Server : MonoBehaviour
     {
         if (mark == 1)
         {
-            EventSystem.GetComponent<player2Script>().decode(strMessage1);
+            EventSystem.GetComponent<deCodeScript>().decode(strMessage1);
         }
     }
 

@@ -21,8 +21,8 @@ public class billBoard : MonoBehaviour
         //print(dis);
         if(dis < 100 && dis > 40)
         {
-            transform.localScale = new Vector3(0.002f * dis, 0.002f * dis, 0.002f * dis);
-            this.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 2f + 0.015f * dis, 0);
+            transform.localScale = new Vector3(0.0015f * dis, 0.0015f * dis, 0.0015f * dis);
+            this.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 1.7f + 0.015f * dis, 0);
         }
     }
 }

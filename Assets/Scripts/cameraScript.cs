@@ -29,9 +29,8 @@ public class cameraScript : MonoBehaviour
 
         if(viewer == 1)
         {
-            transform.position = new Vector3(_Player.position.x, _Player.position.y + 8, _Player.position.z + 2);
-            transform.localRotation = Quaternion.Euler(dx, 0, 0);
-            transform.RotateAround(_Player.position, _Player.up, dy);
+            transform.position = new Vector3(0,  8, -5);
+            transform.localRotation = Quaternion.Euler(0, 90, 0);
         }
         else if(viewer == 3)
         {

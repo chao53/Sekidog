@@ -65,7 +65,7 @@ public class Client : MonoBehaviour
     {
         if (mark == 1)
         {
-            EventSystem.GetComponent<player2Script>().decode(strMessage);
+            EventSystem.GetComponent<deCodeScript>().decode(strMessage);
         }
     }
 }

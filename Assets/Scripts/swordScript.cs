@@ -4,19 +4,30 @@ using UnityEngine;
 
 public class swordScript : MonoBehaviour
 {
+    public bool _switch = false;
     GameObject EventSystem;
     // Start is called before the first frame update
     void Start()
     {
         EventSystem = GameObject.Find("EventSystem");
     }
-    void OnTriggerEnter(Collider col)
+    void OnTriggerStay(Collider col)
     {
-        if (col.tag == "player" && col.name != EventSystem.GetComponent<player1Script>()._Player.name)
+        
+        if (col.tag == "player" && col.name != EventSystem.GetComponent<player1Script>().player1.name && _switch)
         {
-            print("1");
+            EventSystem.GetComponent<player1Script>().swordHit(col.gameObject);
         }
     }
+
+    //private void OnTriggerExit(Collider col)
+    //{
+    //    if (col.tag == "player" && col.name != EventSystem.GetComponent<player1Script>().player1.name && _switch)
+    //    {
+    //        EventSystem.GetComponent<player1Script>().swordLeave();
+    //    }
+    //}
+
 
     // Update is called once per frame
     void Update()

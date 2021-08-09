@@ -16,7 +16,6 @@ public class dataScript : MonoBehaviour
     public GameObject SPanel;
     public GameObject CPanel;
     public GameObject GPanel;
-
     public int viewer = 3;
     public int playerID = 1;
     public string localIP = "0.0.0.0";
@@ -35,25 +34,26 @@ public class dataScript : MonoBehaviour
     public void changePlayerID(int i)
     {
         playerID = i;
-        this.GetComponent<player2Script>().attatchPlayer(3-i);
-        this.GetComponent<player1Script>().attatchPlayer(i);
+        this.GetComponent<deCodeScript>().attatchPlayer(3-i);
         this.GetComponent<player1Script>().turnSwitch(1);
         Camera1.GetComponent<cameraScript>().attatchPlayer(i);
         Camera2.GetComponent<cameraScript>().attatchPlayer(i);
+        GameObject.Find("Sword" + i).GetComponent<swordScript>()._switch = true;
 
-        if(i == 1)
+        if (i == 1)
         {
-            Server.GetComponent<Server>().CreatServer(SInputIpv4.GetComponent<InputField>().text, int.Parse(SInputPort.GetComponent<InputField>().text));
+            Server.GetComponent<Server>().CreatServer(SInputIpv4.GetComponent<InputField>().text.Trim(), int.Parse(SInputPort.GetComponent<InputField>().text.Replace("_", "")));
+            this.GetComponent<player1Script>().attatchPlayer(i, SInputName.GetComponent<InputField>().text.Replace("_", ""));
             SPanel.SetActive(false);
             GPanel.SetActive(true);
-            //PlayerName = SInputName.GetComponent<InputField>().text;
         }
         else if(i == 2)
         {
-            Client.GetComponent<Client>().startConnect(CInputIPv4.GetComponent<InputField>().text, int.Parse(CInputPort.GetComponent<InputField>().text));
+            Client.GetComponent<Client>().startConnect(CInputIPv4.GetComponent<InputField>().text.Trim(), int.Parse(CInputPort.GetComponent<InputField>().text.Replace("_", "")));
+            this.GetComponent<player1Script>().attatchPlayer(i, CInputName.GetComponent<InputField>().text.Replace("_", ""));
             CPanel.SetActive(false);
             GPanel.SetActive(true);
-            //PlayerName = inputName.GetComponent<InputField>().text;
+           
         }
     }
 

@@ -18,7 +18,7 @@ public class SetIPv4 : MonoBehaviour
             
             if (ipa.AddressFamily == AddressFamily.InterNetwork)
             {
-                print(ipa.ToString());
+                //print(ipa.ToString());
                 thisIp = ipa.ToString();
             }
         }
