@@ -9,7 +9,13 @@ public class deCodeScript : MonoBehaviour
     public GameObject player2;
     public GameObject nameTag;
     public int player2State = 0;
-    //private GameObject c1;
+    public GameObject enemyRedBlood = null;
+
+    //public AudioSource sound1;//人移动的声音
+    public AudioSource sound2;//剑的声音
+    public AudioSource sound3;//剑碰撞的声音
+    public AudioSource sound4;//火焰
+
     private Animator _animator;
     private int TotalDam = 0;
     private int spark1 = 0;
@@ -29,8 +35,9 @@ public class deCodeScript : MonoBehaviour
 
     public void attatchPlayer(int x)
     {
-        player2 = GameObject.Find("player" + x);
-        nameTag = GameObject.Find("NameTag" + x);
+        player2 = GameObject.Find("player" + (3 - x));
+        nameTag = GameObject.Find("NameTag" + (3 - x));
+        enemyRedBlood = GameObject.Find("redBlood" + (3 - x));
         _animator = player2.GetComponent<Animator>();
     }
 
@@ -100,20 +107,28 @@ public class deCodeScript : MonoBehaviour
             _animator.SetInteger("roll",int.Parse(vs[11]));
             if (int.Parse(vs[12]) > TotalDam)
             {
-                EventSystem.GetComponent<player1Script>().beHurt(TotalDam);
-                TotalDam = int.Parse(vs[12]);
+                EventSystem.GetComponent<player1Script>().beHurt(int.Parse(vs[12]) - TotalDam);
+                TotalDam = int.Parse(vs[12]);          
             }
 
-            if(int.Parse(vs[13]) > spark1)
+            enemyRedBlood.transform.localScale = new Vector3((float)(int.Parse(vs[13])) / EventSystem.GetComponent<player1Script>().totalHp, 1, 1);
+            enemyRedBlood.transform.localPosition = new Vector3(-0.5f * (float)(EventSystem.GetComponent<player1Script>().totalHp - int.Parse(vs[13]))/ EventSystem.GetComponent<player1Script>().totalHp, 0, -0.001f);
+
+
+            if (int.Parse(vs[14]) > spark1)
             {
                 GameObject csp1 = Instantiate(Resources.Load<GameObject>("Prefabs/spark"), EventSystem.GetComponent<player1Script>().player1.transform.position + new Vector3(0, 6, 0), Quaternion.Euler(0, 0, 0));
-                spark1 = int.Parse(vs[13]);
+                spark1 = int.Parse(vs[14]);
+                sound3.clip = Resources.Load<AudioClip>("Musics/duang" + (spark1 % 2 + 1));
+                sound3.Play();
             }
 
-            if(int.Parse(vs[14]) > spark2)
+            if(int.Parse(vs[15]) > spark2)
             {
                 GameObject csp2 = Instantiate(Resources.Load<GameObject>("Prefabs/spark2"), EventSystem.GetComponent<player1Script>().player1.transform.position + new Vector3(0, 6, 0), Quaternion.Euler(0, 0, 0));
-                spark2 = int.Parse(vs[14]);
+                spark2 = int.Parse(vs[15]);
+                sound3.clip = Resources.Load<AudioClip>("Musics/Hurt");
+                sound3.Play();
             }
         }
     }
@@ -121,6 +136,8 @@ public class deCodeScript : MonoBehaviour
     IEnumerator a1Countdown()
     {
         GameObject c01 = Instantiate(Resources.Load<GameObject>("Prefabs/SLight01"), player2.transform.position, player2.transform.rotation);
+        sound2.clip = Resources.Load<AudioClip>("Musics/swordWind");
+        sound2.Play();
         for (float timer = 1f; timer >= 0; timer -= Time.deltaTime)
         {
             yield return 0;
@@ -131,6 +148,8 @@ public class deCodeScript : MonoBehaviour
     IEnumerator a2Countdown()
     {
         GameObject c02 = Instantiate(Resources.Load<GameObject>("Prefabs/SLight02"), player2.transform.position, player2.transform.rotation);
+        sound2.clip = Resources.Load<AudioClip>("Musics/swordWind2");
+        sound2.Play();
         for (float timer = 1f; timer >= 0; timer -= Time.deltaTime)
         {
             yield return 0;
@@ -140,6 +159,8 @@ public class deCodeScript : MonoBehaviour
 
     IEnumerator a3Countdown()
     {
+        sound2.clip = Resources.Load<AudioClip>("Musics/swordWind3");
+        sound2.Play();
         for (float timer = 0.2f; timer >= 0; timer -= Time.deltaTime)
         {
             yield return 0;
@@ -169,6 +190,8 @@ public class deCodeScript : MonoBehaviour
     IEnumerator a0Countdown()
     {
         GameObject c00 = Instantiate(Resources.Load<GameObject>("Prefabs/SLight00"), player2.transform.position, player2.transform.rotation);
+        sound2.clip = Resources.Load<AudioClip>("Musics/swordWind2");
+        sound2.Play();
         for (float timer = 0.5f; timer >= 0; timer -= Time.deltaTime)
         {
             yield return 0;
@@ -179,6 +202,8 @@ public class deCodeScript : MonoBehaviour
     IEnumerator a4Countdown()
     {
         GameObject c06 = Instantiate(Resources.Load<GameObject>("Prefabs/SLight06"), player2.transform.position, player2.transform.rotation);
+        sound2.clip = Resources.Load<AudioClip>("Musics/swordWind2");
+        sound2.Play();
         for (float timer = 1f; timer >= 0; timer -= Time.deltaTime)
         {
             yield return 0;
@@ -189,6 +214,8 @@ public class deCodeScript : MonoBehaviour
     IEnumerator a5Countdown()
     {
         GameObject c08 = Instantiate(Resources.Load<GameObject>("Prefabs/SLight08"), player2.transform.position, player2.transform.rotation);
+        sound2.clip = Resources.Load<AudioClip>("Musics/swordWind");
+        sound2.Play();
         for (float timer = 1f; timer >= 0; timer -= Time.deltaTime)
         {
             yield return 0;
@@ -198,6 +225,8 @@ public class deCodeScript : MonoBehaviour
 
     IEnumerator fireCountdown()
     {
+        sound4.clip = Resources.Load<AudioClip>("Musics/fire");
+        sound4.Play();
         for (float timer = 0.4f; timer >= 0; timer -= Time.deltaTime)
         {
             yield return 0;

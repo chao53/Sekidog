@@ -13,7 +13,7 @@ public class swordScript : MonoBehaviour
     }
     void OnTriggerStay(Collider col)
     {
-        
+
         if (col.tag == "player" && col.name != EventSystem.GetComponent<player1Script>().player1.name && _switch)
         {
             EventSystem.GetComponent<player1Script>().swordHit(col.gameObject);
@@ -32,6 +32,6 @@ public class swordScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }

@@ -13,13 +13,19 @@ public class player1Script : MonoBehaviour
     public GameObject player2 = null;
     public GameObject nameTag = null;
     public GameObject playerBlood = null;
-    public GameObject enemyRedBlood = null;
+
+    public AudioSource sound1;//人移动的声音
+    public AudioSource sound2;//剑的声音
+    public AudioSource sound3;//剑碰撞的声音
+    public AudioSource sound4;//火焰
+
     public int totalHp = 200;
+    private int Hp = 200;
 
     private string playerName;
     
     public int _switch = 0;
-    public int _switch2 = 0;
+    public int _switch2 = 0;//绑定玩家
     public float walkSpeed = 30;
     private int actionState = 0;
     public int handState = 0;
@@ -36,7 +42,7 @@ public class player1Script : MonoBehaviour
     private bool hadhurt = true;//是否已造成伤害
     private bool hit = false;//是否击中
     private int TotalDam = 0;//总造成伤害
-    private int totalBeDam = 0;//总受伤
+    //private int totalBeDam = 0;//总受伤
     private GameObject hitObj = null;//攻击的对象
 
     public Animator _animator;
@@ -54,6 +60,7 @@ public class player1Script : MonoBehaviour
         EventSystem = GameObject.Find("EventSystem");
         actionState = 0;
         jumpTimer = 0;
+        Hp = totalHp;
     }
 
     public void turnSwitch(int i)
@@ -64,8 +71,7 @@ public class player1Script : MonoBehaviour
     public void attatchPlayer(int x,string name)
     {
         player1 = GameObject.Find("player" + x);
-        player2 = GameObject.Find("player" + (3 - x));
-        enemyRedBlood = GameObject.Find("redBlood" + (3 - x));
+        player2 = GameObject.Find("player" + (3 - x));       
         _animator = player1.GetComponent<Animator>();
         GameObject.Find("blackBlood" + x).SetActive(false);
         GameObject.Find("NameTag" + x).SetActive(false);
@@ -85,9 +91,9 @@ public class player1Script : MonoBehaviour
     //}
 
 
-    public void beHurt(int totalBeDam)
+    public void beHurt(int Dam)
     {
-        this.totalBeDam = totalBeDam;
+        Hp -= Dam;;
         changeActionState(-2);
     }
 
@@ -105,6 +111,8 @@ public class player1Script : MonoBehaviour
                         actionState = 1;
                         handState = actionState;
                         _animator.SetInteger("Hand", 1);
+                        sound2.clip = Resources.Load<AudioClip>("Musics/swordWind");
+                        sound2.Play();
                         GameObject c01 = Instantiate(Resources.Load<GameObject>("Prefabs/SLight01"), player1.transform.position, player1.transform.rotation);
                         hadhurt = false;
                         actionCD = 0.767f;
@@ -118,6 +126,8 @@ public class player1Script : MonoBehaviour
                         actionState = 2;
                         handState = actionState;
                         _animator.SetInteger("Hand", 2);
+                        sound2.clip = Resources.Load<AudioClip>("Musics/swordWind2");
+                        sound2.Play();
                         GameObject c02 = Instantiate(Resources.Load<GameObject>("Prefabs/SLight02"), player1.transform.position,player1.transform.rotation);
                         hadhurt = false;
                         actionCD = 0.767f;
@@ -130,6 +140,8 @@ public class player1Script : MonoBehaviour
                         actionState = 3;
                         handState = actionState;
                         _animator.SetInteger("Hand", 3);
+                        sound2.clip = Resources.Load<AudioClip>("Musics/swordWind3");
+                        sound2.Play();
                         StartCoroutine(swordCountdown());                       
                         hadhurt = false;
                         actionCD = 1.6f;
@@ -141,7 +153,9 @@ public class player1Script : MonoBehaviour
                     {
                         actionState = 1;
                         handState = actionState;
-                        _animator.SetInteger("Hand", 1);                        
+                        _animator.SetInteger("Hand", 1);
+                        sound2.clip = Resources.Load<AudioClip>("Musics/swordWind");
+                        sound2.Play();
                         GameObject c01 = Instantiate(Resources.Load<GameObject>("Prefabs/SLight01"), player1.transform.position, player1.transform.rotation);
                         hadhurt = false;
                         actionCD = 0.767f;
@@ -154,6 +168,8 @@ public class player1Script : MonoBehaviour
                         actionState = -2;
                         handState = actionState;
                         _animator.SetInteger("Hand", -2);
+                        sound2.clip = Resources.Load<AudioClip>("Musics/swordWind2");
+                        sound2.Play();
                         GameObject c00 = Instantiate(Resources.Load<GameObject>("Prefabs/SLight00"), player1.transform.position, player1.transform.rotation);
                         hadhurt = false;
                         actionCD = 0.467f;
@@ -163,10 +179,11 @@ public class player1Script : MonoBehaviour
                 {
                     if (actionCD >= -0.1f &&actionCD <= 0.5f)
                     {
-                        print(actionCD);
                         actionState = 6;
                         handState = actionState;
                         _animator.SetInteger("Hand", 6);
+                        sound2.clip = Resources.Load<AudioClip>("Musics/swordWind2");
+                        sound2.Play();
                         GameObject c06 = Instantiate(Resources.Load<GameObject>("Prefabs/SLight06"), player1.transform.position, player1.transform.rotation);
                         hadhurt = false;
                         actionCD = 0.567f;
@@ -179,6 +196,8 @@ public class player1Script : MonoBehaviour
                         actionState = 8;
                         handState = actionState;
                         _animator.SetInteger("Hand", 8);
+                        sound2.clip = Resources.Load<AudioClip>("Musics/swordWind");
+                        sound2.Play();
                         GameObject c08 = Instantiate(Resources.Load<GameObject>("Prefabs/SLight08"), player1.transform.position, player1.transform.rotation);
                         hadhurt = false;
                         actionCD = 0.433f;
@@ -192,6 +211,8 @@ public class player1Script : MonoBehaviour
                     actionState = 4;
                     handState = actionState;
                     _animator.SetInteger("Hand", 4);
+                    sound4.clip = Resources.Load<AudioClip>("Musics/fire");
+                    sound4.Play();
                     StartCoroutine(fireCountdown());
                     hadhurt = false;
                     actionCD = 0.667f;
@@ -284,12 +305,16 @@ public class player1Script : MonoBehaviour
         {
             player1.gameObject.GetComponent<Rigidbody>().velocity = Vector3.up * 36;
             jumpTimer = 1f;
+            sound1.clip = Resources.Load<AudioClip>("Musics/jump");
+            sound1.Play();
             CanSecondJump = true;
         }
         else if(jumpTimer > 0.4f && CanSecondJump)
         {
             player1.gameObject.GetComponent<Rigidbody>().velocity = Vector3.up * 36;
             changeActionState(3);
+            sound1.clip = Resources.Load<AudioClip>("Musics/jump");
+            sound1.Play();
             CanSecondJump = false;
         }
     }
@@ -298,9 +323,11 @@ public class player1Script : MonoBehaviour
     {
         if (rollCD <= 0 && actionCD <= 0 && actionState == 0)
         {
-            rollCD = 2;
+            rollCD = 1.068f;
             rolling = 2f;
             _animator.SetInteger("roll", 1);
+            sound1.clip = Resources.Load<AudioClip>("Musics/jump");
+            sound1.Play();
             roll = 1;
             actionCD = 1f;
             actionState = 7;
@@ -360,14 +387,19 @@ public class player1Script : MonoBehaviour
                         {
                             print("hurt");
                             GameObject csp2 = Instantiate(Resources.Load<GameObject>("Prefabs/spark2"), player2.transform.position + new Vector3(0,6,0), Quaternion.Euler(0, 0, 0));
+                            sound3.clip = Resources.Load<AudioClip>("Musics/Hurt");
+                            sound3.Play();
                             spark2++;
                             TotalDam += 3;
                         }
                         else
                         {
                             print("duang");
+                            
                             changeActionState(-2);//被格挡，僵直
                             GameObject csp1 = Instantiate(Resources.Load<GameObject>("Prefabs/spark"), player2.transform.position + new Vector3(0, 6, 0), Quaternion.Euler(0,0,0));
+                            sound3.clip = Resources.Load<AudioClip>("Musics/duang" + (spark1%2 + 1));
+                            sound3.Play();
                             spark1++;                      
                         }
                         hadhurt = true;
@@ -385,6 +417,8 @@ public class player1Script : MonoBehaviour
                             {
                                 print("hurt");
                                 GameObject csp2 = Instantiate(Resources.Load<GameObject>("Prefabs/spark2"), player2.transform.position + new Vector3(0, 6, 0), Quaternion.Euler(0, 0, 0));
+                                sound3.clip = Resources.Load<AudioClip>("Musics/Hurt");
+                                sound3.Play();
                                 spark2++;
                                 TotalDam += 1;
                             }
@@ -392,6 +426,8 @@ public class player1Script : MonoBehaviour
                             {
                                 print("duang");
                                 GameObject csp1 = Instantiate(Resources.Load<GameObject>("Prefabs/spark"), player2.transform.position + new Vector3(0, 6, 0), Quaternion.Euler(0, 0, 0));
+                                sound3.clip = Resources.Load<AudioClip>("Musics/duang" + (spark1 % 2 + 1));
+                                sound3.Play();
                                 spark1++;
                             }
                             hadhurt = true;
@@ -410,6 +446,8 @@ public class player1Script : MonoBehaviour
                             {
                                 print("hurt");
                                 GameObject csp2 = Instantiate(Resources.Load<GameObject>("Prefabs/spark2"), player2.transform.position + new Vector3(0, 6, 0), Quaternion.Euler(0, 0, 0));
+                                sound3.clip = Resources.Load<AudioClip>("Musics/Hurt");
+                                sound3.Play();
                                 spark2++;
                                 TotalDam += 1;
                             }
@@ -417,6 +455,8 @@ public class player1Script : MonoBehaviour
                             {
                                 print("duang");
                                 GameObject csp1 = Instantiate(Resources.Load<GameObject>("Prefabs/spark"), player2.transform.position + new Vector3(0, 6, 0), Quaternion.Euler(0, 0, 0));
+                                sound3.clip = Resources.Load<AudioClip>("Musics/duang" + (spark1 % 2 + 1));
+                                sound3.Play();
                                 spark1++;
                             }
                             hadhurt = true;
@@ -435,6 +475,8 @@ public class player1Script : MonoBehaviour
                             {
                                 print("hurt");
                                 GameObject csp2 = Instantiate(Resources.Load<GameObject>("Prefabs/spark2"), player2.transform.position + new Vector3(0, 6, 0), Quaternion.Euler(0, 0, 0));
+                                sound3.clip = Resources.Load<AudioClip>("Musics/Hurt");
+                                sound3.Play();
                                 spark2++;
                                 TotalDam += 1;
                             }
@@ -442,6 +484,8 @@ public class player1Script : MonoBehaviour
                             {
                                 print("duang");
                                 GameObject csp1 = Instantiate(Resources.Load<GameObject>("Prefabs/spark"), player2.transform.position + new Vector3(0, 6, 0), Quaternion.Euler(0, 0, 0));
+                                sound3.clip = Resources.Load<AudioClip>("Musics/duang" + (spark1 % 2 + 1));
+                                sound3.Play();
                                 spark1++;
                             }
                             hadhurt = true;
@@ -460,6 +504,8 @@ public class player1Script : MonoBehaviour
                             {
                                 print("hurt");
                                 GameObject csp2 = Instantiate(Resources.Load<GameObject>("Prefabs/spark2"), player2.transform.position + new Vector3(0, 6, 0), Quaternion.Euler(0, 0, 0));
+                                sound3.clip = Resources.Load<AudioClip>("Musics/Hurt");
+                                sound3.Play();
                                 spark2++;
                                 TotalDam += 3;
                             }
@@ -467,6 +513,8 @@ public class player1Script : MonoBehaviour
                             {
                                 print("duang");
                                 GameObject csp1 = Instantiate(Resources.Load<GameObject>("Prefabs/spark"), player2.transform.position + new Vector3(0, 6, 0), Quaternion.Euler(0, 0, 0));
+                                sound3.clip = Resources.Load<AudioClip>("Musics/duang" + (spark1 % 2 + 1));
+                                sound3.Play();
                                 spark1++;
                             }
                             hadhurt = true;
@@ -486,6 +534,8 @@ public class player1Script : MonoBehaviour
                         {
                             print("hurt");
                             GameObject csp2 = Instantiate(Resources.Load<GameObject>("Prefabs/spark2"), player2.transform.position + new Vector3(0, 6, 0), Quaternion.Euler(0, 0, 0));
+                            sound3.clip = Resources.Load<AudioClip>("Musics/Hurt");
+                            sound3.Play();
                             spark2++;
                             TotalDam += 3;
                         }
@@ -494,6 +544,8 @@ public class player1Script : MonoBehaviour
                             changeActionState(-2);//被格挡，僵直
                             print("duang");
                             GameObject csp1 = Instantiate(Resources.Load<GameObject>("Prefabs/spark"), player2.transform.position + new Vector3(0, 6, 0), Quaternion.Euler(0, 0, 0));
+                            sound3.clip = Resources.Load<AudioClip>("Musics/duang" + (spark1 % 2 + 1));
+                            sound3.Play();
                             spark1++;
                         }
                         hadhurt = true;
@@ -513,6 +565,8 @@ public class player1Script : MonoBehaviour
                         {
                             print("hurt");
                             GameObject csp2 = Instantiate(Resources.Load<GameObject>("Prefabs/spark2"), player2.transform.position + new Vector3(0, 6, 0), Quaternion.Euler(0, 0, 0));
+                            sound3.clip = Resources.Load<AudioClip>("Musics/Hurt");
+                            sound3.Play();
                             spark2++;
                             TotalDam += 5;
                         }
@@ -521,6 +575,8 @@ public class player1Script : MonoBehaviour
                             changeActionState(-2);//被格挡，僵直
                             print("duang");
                             GameObject csp1 = Instantiate(Resources.Load<GameObject>("Prefabs/spark"), player2.transform.position + new Vector3(0, 6, 0), Quaternion.Euler(0, 0, 0));
+                            sound3.clip = Resources.Load<AudioClip>("Musics/duang" + (spark1 % 2 + 1));
+                            sound3.Play();
                             spark1++;
                         }
                         hadhurt = true;
@@ -539,6 +595,8 @@ public class player1Script : MonoBehaviour
                         {
                             print("hurt");
                             GameObject csp2 = Instantiate(Resources.Load<GameObject>("Prefabs/spark2"), player2.transform.position + new Vector3(0, 6, 0), Quaternion.Euler(0, 0, 0));
+                            sound3.clip = Resources.Load<AudioClip>("Musics/Hurt");
+                            sound3.Play();
                             spark2++;
                             TotalDam += 2;
                         }
@@ -547,6 +605,8 @@ public class player1Script : MonoBehaviour
                             changeActionState(-2);//被格挡，僵直
                             print("duang");
                             GameObject csp1 = Instantiate(Resources.Load<GameObject>("Prefabs/spark"), player2.transform.position + new Vector3(0, 6, 0), Quaternion.Euler(0, 0, 0));
+                            sound3.clip = Resources.Load<AudioClip>("Musics/duang" + (spark1 % 2 + 1));
+                            sound3.Play();
                             spark1++;
                         }
                         hadhurt = true;
@@ -600,13 +660,10 @@ public class player1Script : MonoBehaviour
             //print(actionState + " " + actionCD);
 
 
-            enemyRedBlood.transform.localScale = new Vector3((float)(totalHp - TotalDam) / totalHp, 1, 1);
-            enemyRedBlood.transform.localPosition = new Vector3(-0.5f*TotalDam/ totalHp, 0, -0.001f);
 
 
-            playerBlood.GetComponent<RectTransform>().sizeDelta = new Vector2(400* (float)(totalHp - totalBeDam) / totalHp, 20);
-            playerBlood.GetComponent<RectTransform>().anchoredPosition = new Vector2(-200 * (float)totalBeDam/ totalHp, 10);
-            //print(totalBeDam);
+            playerBlood.GetComponent<RectTransform>().sizeDelta = new Vector2(400* (float)Hp / totalHp, 20);
+            playerBlood.GetComponent<RectTransform>().anchoredPosition = new Vector2(-200 * (float)(totalHp - Hp)/ totalHp, 10);
             
 
             if (Ix != 0 || Iz != 0)
@@ -661,13 +718,13 @@ public class player1Script : MonoBehaviour
             if(_switch2 == 1)
             {
                 Server.GetComponent<Server>().changeInfo("1_"+ playerName + "_" + player1.transform.position.x + "_" + player1.transform.position.y + "_" + player1.transform.position.z 
-                    + "_" + Ia + "_" + handState + "_" + Ix + "_" + Iz + "_" + jump + "_" + jumpTimer + "_" + roll + "_" + TotalDam + "_" + spark1 + "_" + spark2 + "_");
+                    + "_" + Ia + "_" + handState + "_" + Ix + "_" + Iz + "_" + jump + "_" + jumpTimer + "_" + roll + "_" + TotalDam + "_"  + Hp + "_" + spark1 + "_" + spark2 + "_");
             }
 
             if(_switch2 == 2)//向服务端发送实时信息
             {
                 Client.GetComponent<Client>().Send("1_" + playerName + "_" + player1.transform.position.x + "_" + player1.transform.position.y + "_" + player1.transform.position.z
-                    + "_" + Ia + "_" + handState + "_" + Ix + "_" + Iz + "_" + jump + "_" + jumpTimer + "_" + roll + "_" + TotalDam + "_" + spark1 + "_" + spark2 + "_");
+                    + "_" + Ia + "_" + handState + "_" + Ix + "_" + Iz + "_" + jump + "_" + jumpTimer + "_" + roll + "_" + TotalDam + "_" + Hp + "_" + spark1 + "_" + spark2 + "_");
             }
         }
     }
