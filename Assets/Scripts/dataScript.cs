@@ -40,7 +40,7 @@ public class dataScript : MonoBehaviour
         this.GetComponent<player1Script>().turnSwitch(1);
         Camera1.GetComponent<cameraScript>().attatchPlayer(i);
         Camera2.GetComponent<cameraScript>().attatchPlayer(i);
-        GameObject.Find("Sword" + i).GetComponent<swordScript>()._switch = true;
+        GameObject.Find("sword" + i).GetComponent<swordScript>()._switch = true;
 
         soundSet1.transform.parent = GameObject.Find("player" + i).transform;
         soundSet1.transform.localPosition = new Vector3(0, 2, 0);

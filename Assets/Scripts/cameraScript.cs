@@ -34,7 +34,7 @@ public class cameraScript : MonoBehaviour
         }
         else if(viewer == 3)
         {
-            transform.position = new Vector3(_Player.position.x, _Player.position.y + 10 + dx/10, _Player.position.z - 15 + Mathf.Abs(dx)/6);
+            transform.position = new Vector3(_Player.position.x + 2.5f, _Player.position.y + 10 + dx/10, _Player.position.z - 15 + Mathf.Abs(dx)/6);
             transform.localRotation = Quaternion.Euler(dx, 0, 0);
             transform.RotateAround(_Player.position, _Player.up, dy);
         }

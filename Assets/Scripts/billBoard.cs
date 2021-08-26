@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class billBoard : MonoBehaviour
 {
-
+    
     public Transform _camera;
     // Start is called before the first frame update
     void Start()
@@ -15,7 +15,7 @@ public class billBoard : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Quaternion rotation = Quaternion.LookRotation(this.transform.position - _camera.position);  //获取目标方向
+        Quaternion rotation = Quaternion.LookRotation(this.transform.position - _camera.position);  //锟斤拷取目锟疥方锟斤拷
         transform.rotation = rotation;
         float dis = Vector3.Distance(this.transform.position, _camera.position);
         //print(dis);

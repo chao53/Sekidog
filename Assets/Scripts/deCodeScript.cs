@@ -20,6 +20,10 @@ public class deCodeScript : MonoBehaviour
     private int TotalDam = 0;
     private int spark1 = 0;
     private int spark2 = 0;
+    private int spark3 = 0;
+
+    private int feibiaoNum = 0;
+
     private bool firing = false;
     private bool a0ing = false;
     private bool a1ing = false;
@@ -129,6 +133,28 @@ public class deCodeScript : MonoBehaviour
                 spark2 = int.Parse(vs[15]);
                 sound3.clip = Resources.Load<AudioClip>("Musics/Hurt");
                 sound3.Play();
+            }
+
+            if (int.Parse(vs[16]) > spark3)
+            {
+                GameObject csp3 = Instantiate(Resources.Load<GameObject>("Prefabs/spark" + (3 + int.Parse(vs[17])%2)), player2.transform.position, player2.transform.rotation);
+                spark3 = int.Parse(vs[16]);
+                sound2.clip = Resources.Load<AudioClip>("Musics/feibiao");
+                sound2.Play();
+            }
+
+            if(int.Parse(vs[18]) > feibiaoNum)
+            {
+                GameObject cf1 = Instantiate(Resources.Load<GameObject>("Prefabs/feibiao"), new Vector3(float.Parse(vs[19]), float.Parse(vs[20]), float.Parse(vs[21])), Quaternion.Euler(0, player2.transform.rotation.eulerAngles.y + 90, 0));
+                GameObject cf2 = Instantiate(Resources.Load<GameObject>("Prefabs/feibiao"), new Vector3(float.Parse(vs[19]), float.Parse(vs[20]), float.Parse(vs[21])), Quaternion.Euler(0, player2.transform.rotation.eulerAngles.y + 90, 0));
+                GameObject cf3 = Instantiate(Resources.Load<GameObject>("Prefabs/feibiao"), new Vector3(float.Parse(vs[19]), float.Parse(vs[20]), float.Parse(vs[21])), Quaternion.Euler(0, player2.transform.rotation.eulerAngles.y + 90, 0));
+                cf1.GetComponent<Rigidbody>().velocity = new Vector3(float.Parse(vs[22]), float.Parse(vs[23]), float.Parse(vs[24]));
+                cf2.GetComponent<Rigidbody>().velocity = new Vector3(Mathf.Cos(Mathf.PI / 36) * float.Parse(vs[22]) - Mathf.Sin(Mathf.PI / 36) * float.Parse(vs[24]), float.Parse(vs[23]), Mathf.Sin(Mathf.PI / 36) * float.Parse(vs[22]) + Mathf.Cos(Mathf.PI / 36) * float.Parse(vs[24]));
+                cf3.GetComponent<Rigidbody>().velocity = new Vector3(Mathf.Cos(-Mathf.PI / 36) * float.Parse(vs[22]) - Mathf.Sin(-Mathf.PI / 36) * float.Parse(vs[24]), float.Parse(vs[23]), Mathf.Sin(-Mathf.PI / 36) * float.Parse(vs[22]) + Mathf.Cos(-Mathf.PI / 36) * float.Parse(vs[24]));
+                cf1.GetComponent<feibiaoScript>().canHurt = false;
+                cf2.GetComponent<feibiaoScript>().canHurt = false;
+                cf3.GetComponent<feibiaoScript>().canHurt = false;
+                feibiaoNum = int.Parse(vs[18]);
             }
         }
     }
