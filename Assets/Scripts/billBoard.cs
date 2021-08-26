@@ -5,19 +5,18 @@ using UnityEngine;
 public class billBoard : MonoBehaviour
 {
     
-    public Transform _camera;
     // Start is called before the first frame update
     void Start()
     {
-        _camera = GameObject.Find("UICamera").transform;
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        Quaternion rotation = Quaternion.LookRotation(this.transform.position - _camera.position);  //��ȡĿ�귽��
+        Quaternion rotation = Quaternion.LookRotation(this.transform.position - Camera.main.transform.position);  //��ȡĿ�귽��
         transform.rotation = rotation;
-        float dis = Vector3.Distance(this.transform.position, _camera.position);
+        float dis = Vector3.Distance(this.transform.position, Camera.main.transform.position);
         //print(dis);
         if(dis < 100 && dis > 40)
         {
